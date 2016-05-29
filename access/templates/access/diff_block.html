@@ -1,0 +1,23 @@
+{% load i18n %}
+<div class="container">
+    {% for res in results %}
+    <div class="row">
+        {% if res.fail %}
+        <div class="alert alert-danger"><strong>Failed: </strong> {{ res.description }} </div>
+        {% else %}
+        <div class="alert alert-success"><strong>Passed: </strong> {{ res.description }} </div>
+        {% endif %}
+     </div>
+    <div class="row">
+
+        <div class="col-xs-6">
+            <h4>{% trans "Your program" %}</h4>
+            <pre>res.actual</pre>
+        </div>
+        <div class="col-xs-6">
+            <h4>{% trans "Model program" %}</h4>
+            <pre>res.expected</pre>
+        </div>
+    </div>
+    {% endfor %}
+</div>

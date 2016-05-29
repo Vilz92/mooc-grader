@@ -17,6 +17,9 @@ Functions take arguments:
         stop = True to stop further actions, appendix = appendix output
 '''
 from django.conf import settings
+from django.template import loader, Context
+from django.shortcuts import render
+
 from access.config import ConfigError
 from util.shell import invoke_script, invoke_sandbox
 from util.xslt import transform
@@ -61,6 +64,32 @@ def sandbox_python_test(course, exercise, action, submission_dir):
     r = sandbox(course, exercise, action, submission_dir)
     return { "points": r["points"], "max_points": r["max_points"],
         "out": r["err"], "err": "", "stop": r["stop"] }
+
+
+def diffbox(course, exercise, action, submission_dir):
+    return johoh(course, exercise, action, submission_dir)
+
+
+def johoh(course, exercise, action, submission_dir):
+    '''
+    Executes sandbox script and looks for TotalPoints line in the result. The same
+    as sandbox but as sandbox but style feedback based on expected and real blocks
+    '''
+    res =  _find_point_lines(invoke_sandbox(course["key"], action,
+        submission_dir))
+
+    structured =  _parse_difftests(res['out'])    
+
+    # TODO use template_to_str for enabling user defined templates
+    tmpl = loader.get_template("access/diff_block.html")
+    html = tmpl.render(Context({"results": structured}))
+    # Make unicode results ascii.
+    html = html.encode("ascii", "xmlcharrefreplace")    
+
+    res['out'] = ""
+    res['html'] = html
+
+    return res
 
 
 def expaca(course, exercise, action, submission_dir):
@@ -155,6 +184,57 @@ def _boolean(result):
     '''
     return { "points": 0, "max_points": 0, "out": result["out"],
         "err": result["err"], "stop": result["code"] != 0 }
+
+
+def _parse_difftests(output):
+    # the list of all test resutls    
+    tests = []
+
+    # expected and actual output can be interleaved if all lines are prefixed so this is
+    # why we use multiple variables to build the properties of a test result
+    description = []
+    expected = []
+    actual = []
+
+    section = 'actual' #Assume that output is student output if nothing is defined
+    for l in output.split("\n"):
+        try:
+            if l.startswith("Testcase:"):
+                if description and expected and actual: #commit this and start new test item
+                    tests.append({'description': "\n".join(description),
+                                  'expected': "\n".join(expected),
+                                  'actual': "\n".join(actual),
+                                  'fail': expected.trim != actual})
+                    description = []
+                    expected = [] 
+                    actual = []
+                # in any case, add the description
+                description.append(l[10:])
+                section = 'description'
+            elif l.startswith("Expected:"):
+                expected.append(l[10:])
+                section = 'expected' 
+            elif l.startswith("Actual:"):
+                actual.append(l[8:])
+                section = 'actual'
+            else:
+                if section == 'description':
+                    description.append(l)
+                elif section == 'expected':
+                    expected.append(l)
+                elif section == 'actual':
+                    actual.append(l)
+                else:
+                    pass
+                    #return result #TODO this should newer happen - should add a note to user
+        except Exception as e:
+            pass
+    tests.append({'description': "\n".join(description),
+                  'expected': "\n".join(expected),
+                  'actual': "\n".join(actual),
+                  'fail': expected != actual})
+    return tests
+
 
 
 def _find_point_lines(result):

@@ -248,3 +248,11 @@ msgstr ""
 "Hups, palautuksesi arvostelu kesti yli maksimiajan!\n"
 "Pahoittelemme häiriötä.\n"
 "Yritä myöhemmin uudelleen tai ota yhteyttä kurssihenkilökuntaan."
+
+#: access/templates/access/diff_block.html:4
+msgid "Your program"
+msgstr "Oma ohjelmasi"
+
+#: access/templates/access/diff_block.html:7
+msgid "Model program"
+msgstr "Malliratkaisu"
