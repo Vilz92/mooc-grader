@@ -12,11 +12,11 @@
 
         <div class="col-xs-6">
             <h4>{% trans "Your program" %}</h4>
-            <pre>res.actual</pre>
+            <pre>{{res.actual|safe }}</pre>
         </div>
         <div class="col-xs-6">
             <h4>{% trans "Model program" %}</h4>
-            <pre>res.expected</pre>
+            <pre>{{res.expected|safe }}</pre>
         </div>
     </div>
     {% endfor %}

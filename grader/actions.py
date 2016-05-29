@@ -78,16 +78,16 @@ def johoh(course, exercise, action, submission_dir):
     res =  _find_point_lines(invoke_sandbox(course["key"], action,
         submission_dir))
 
-    structured =  _parse_difftests(res['out'])    
+    structured =  _parse_difftests(res['out'])
 
     # TODO use template_to_str for enabling user defined templates
     tmpl = loader.get_template("access/diff_block.html")
     html = tmpl.render(Context({"results": structured}))
     # Make unicode results ascii.
-    html = html.encode("ascii", "xmlcharrefreplace")    
+    html = html.encode("ascii", "xmlcharrefreplace")
 
-    res['out'] = ""
-    res['html'] = html
+    res['out'] = html
+    res['html'] = True
 
     return res
 
@@ -187,7 +187,7 @@ def _boolean(result):
 
 
 def _parse_difftests(output):
-    # the list of all test resutls    
+    # the list of all test resutls
     tests = []
 
     # expected and actual output can be interleaved if all lines are prefixed so this is
@@ -206,14 +206,14 @@ def _parse_difftests(output):
                                   'actual': "\n".join(actual),
                                   'fail': expected.trim != actual})
                     description = []
-                    expected = [] 
+                    expected = []
                     actual = []
                 # in any case, add the description
                 description.append(l[10:])
                 section = 'description'
             elif l.startswith("Expected:"):
                 expected.append(l[10:])
-                section = 'expected' 
+                section = 'expected'
             elif l.startswith("Actual:"):
                 actual.append(l[8:])
                 section = 'actual'

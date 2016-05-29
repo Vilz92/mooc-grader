@@ -15,7 +15,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Add project level templates and static files
 TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'), os.path.join(BASE_DIR, 'exercises'))
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
@@ -91,6 +90,7 @@ LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'),)
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static/") #'/srv/grader/mooc-grader/static/'
 
 #
 # Celery task queue settings:
