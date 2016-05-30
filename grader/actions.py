@@ -17,7 +17,7 @@ Functions take arguments:
         stop = True to stop further actions, appendix = appendix output
 '''
 from django.conf import settings
-from django.template import loader, Context
+from django.template import loader, Context, Template
 from django.shortcuts import render
 
 from access.config import ConfigError
@@ -80,14 +80,16 @@ def johoh(course, exercise, action, submission_dir):
 
     structured =  _parse_difftests(res['out'])    
 
+    print(structured)
+
     # TODO use template_to_str for enabling user defined templates
     tmpl = loader.get_template("access/diff_block.html")
     html = tmpl.render(Context({"results": structured}))
     # Make unicode results ascii.
-    html = html.encode("ascii", "xmlcharrefreplace")    
+    out = (Template("<pre style='display:none;'>{{out}}</pre>").render(Context({"out": res['out']})) + html).encode("ascii", "xmlcharrefreplace")
 
-    res['out'] = ""
-    res['html'] = html
+    res['out'] = out
+    res['html'] = True
 
     return res
 
@@ -185,9 +187,8 @@ def _boolean(result):
     return { "points": 0, "max_points": 0, "out": result["out"],
         "err": result["err"], "stop": result["code"] != 0 }
 
-
 def _parse_difftests(output):
-    # the list of all test resutls    
+    # the list of all test resutls
     tests = []
 
     # expected and actual output can be interleaved if all lines are prefixed so this is
@@ -200,20 +201,20 @@ def _parse_difftests(output):
     for l in output.split("\n"):
         try:
             if l.startswith("Testcase:"):
-                if description and expected and actual: #commit this and start new test item
+                if len(description) > 0 and len(expected) > 0 and len(actual) > 0: #commit this and start new test item
                     tests.append({'description': "\n".join(description),
                                   'expected': "\n".join(expected),
                                   'actual': "\n".join(actual),
-                                  'fail': expected.trim != actual})
+                                  'fail': expected != actual})
                     description = []
-                    expected = [] 
+                    expected = []
                     actual = []
                 # in any case, add the description
                 description.append(l[10:])
                 section = 'description'
             elif l.startswith("Expected:"):
                 expected.append(l[10:])
-                section = 'expected' 
+                section = 'expected'
             elif l.startswith("Actual:"):
                 actual.append(l[8:])
                 section = 'actual'
@@ -224,15 +225,13 @@ def _parse_difftests(output):
                     expected.append(l)
                 elif section == 'actual':
                     actual.append(l)
-                else:
-                    pass
-                    #return result #TODO this should newer happen - should add a note to user
+
         except Exception as e:
             pass
     tests.append({'description': "\n".join(description),
-                  'expected': "\n".join(expected),
-                  'actual': "\n".join(actual),
-                  'fail': expected != actual})
+                      'expected': "\n".join(expected),
+                      'actual': "\n".join(actual),
+                      'fail': expected != actual})
     return tests
 
 
