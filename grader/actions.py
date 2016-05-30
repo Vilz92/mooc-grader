@@ -86,15 +86,9 @@ def johoh(course, exercise, action, submission_dir):
     tmpl = loader.get_template("access/diff_block.html")
     html = tmpl.render(Context({"results": structured}))
     # Make unicode results ascii.
-<<<<<<< HEAD
-    html = html.encode("ascii", "xmlcharrefreplace")
-
-    res['out'] = html
-=======
     out = (Template("<pre style='display:none;'>{{out}}</pre>").render(Context({"out": res['out']})) + html).encode("ascii", "xmlcharrefreplace")
 
     res['out'] = out
->>>>>>> diff/master
     res['html'] = True
 
     return res

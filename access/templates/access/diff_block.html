@@ -14,22 +14,14 @@
     <div class="row">
         <div class="col-xs-6">
             <h4>{% trans "Your program" %}</h4>
-<<<<<<< HEAD
-            <pre>{{res.actual|safe }}</pre>
-        </div>
-        <div class="col-xs-6">
-            <h4>{% trans "Model program" %}</h4>
-            <pre>{{res.expected|safe }}</pre>
-=======
             <pre>{{res.actual}}</pre>
         </div>
         <div class="col-xs-6">
             <h4>{% trans "Model program" %}</h4>
             <pre>{{res.expected}}</pre>
->>>>>>> diff/master
         </div>
     </div>
     {% endif %}
-    <hr> 
+    <hr>
     {% endfor %}
 </div>
