@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-05 07:38+0200\n"
+"POT-Creation-Date: 2016-05-30 09:22+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,7 @@ msgstr "Valitse arvosteltavat tiedostot"
 #: access/templates/access/accept_files_form.html:15
 #: access/templates/access/accept_git_form.html:16
 #: access/templates/access/accept_post_form.html:17
-#: access/templates/access/graded_form.html:63
+#: access/templates/access/graded_form.html:100
 msgid "Submit"
 msgstr "Lähetä"
 
@@ -51,6 +51,7 @@ msgid "Enter your submission"
 msgstr "Kirjoita ratkaisusi"
 
 #: access/templates/access/ajax.html:2
+#, python-format
 msgid ""
 "\n"
 "You got %(points)s/%(max_points)s for your answer.\n"
@@ -71,11 +72,7 @@ msgid "Submission accepted"
 msgstr "Palautus on vastaanotettu"
 
 #: access/templates/access/async_accepted.html:22
-#, fuzzy, python-format
-#| msgid ""
-#| "\n"
-#| "\tMissing the %(key)s for result delivery! Grading and logging results.\n"
-#| "\t"
+#, python-format
 msgid ""
 "\n"
 "\tMissing the <code>%(key)s</code> for result delivery!\n"
@@ -153,6 +150,22 @@ msgstr ""
 "Voit vaihtaa vastauksiasi ja arvostella ne\n"
 "uudelleen sivun lopusta. Huomaa jäljellä olevien palautuskertojen määrä!"
 
+#: access/templates/access/diff_block.html:7
+msgid "Test Failed"
+msgstr "Testi epäonnistui"
+
+#: access/templates/access/diff_block.html:9
+msgid "Test Passed"
+msgstr "OK"
+
+#: access/templates/access/diff_block.html:16
+msgid "Your program"
+msgstr "Oma ohjelmasi"
+
+#: access/templates/access/diff_block.html:20
+msgid "Model program"
+msgstr "Malliohjelma"
+
 #: access/templates/access/exercise_frame.html:15
 msgid "Every file is required for a submission."
 msgstr "Palautus vaatii kaikki tiedostot."
@@ -169,7 +182,8 @@ msgstr "Syötetty osoite ei kelpaa."
 msgid ""
 "The same form can obly be submitted once. Start again from exercise "
 "description."
-msgstr "Sama lomake voidaan lähettää vain kerran. Aloita uudelleen tehtävänannosta."
+msgstr ""
+"Sama lomake voidaan lähettää vain kerran. Aloita uudelleen tehtävänannosta."
 
 #: access/templates/access/exercise_frame.html:31
 msgid "Missing required fields."
@@ -248,11 +262,3 @@ msgstr ""
 "Hups, palautuksesi arvostelu kesti yli maksimiajan!\n"
 "Pahoittelemme häiriötä.\n"
 "Yritä myöhemmin uudelleen tai ota yhteyttä kurssihenkilökuntaan."
-
-#: access/templates/access/diff_block.html:4
-msgid "Your program"
-msgstr "Oma ohjelmasi"
-
-#: access/templates/access/diff_block.html:7
-msgid "Model program"
-msgstr "Malliratkaisu"
